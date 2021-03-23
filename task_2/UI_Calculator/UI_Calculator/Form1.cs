@@ -19,143 +19,20 @@ namespace UI_Calculator
             InitializeComponent();
         }
 
-        private void AddFirstDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "1";
-            }
-            else
-            {
-                number.Text = "1";
-            }
-        }
-
-        private void AddSecondDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "2";
-            }
-            else
-            {
-                number.Text = "2";
-            }
-        }
-
-        private void AddThirdDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "3";
-            }
-            else
-            {
-                number.Text = "3";
-            }
-        }
-
-        private void AddFourthDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "4";
-            }
-            else
-            {
-                number.Text = "4";
-            }
-        }
-
-        private void AddFifthDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "5";
-            }
-            else
-            {
-                number.Text = "5";
-            }
-        }
-
-        private void AddSixthDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "6";
-            }
-            else
-            {
-                number.Text = "6";
-            }
-        }
-
-        private void AddSeventhDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "7";
-            }
-            else
-            {
-                number.Text = "7";
-            }
-        }
-
-        private void AddEightDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "8";
-            }
-            else
-            {
-                number.Text = "8";
-            }
-        }
-
-        private void AddNinthDigit(object sender, EventArgs e)
-        {
-            if (number.Text != "0")
-            {
-                number.Text = number.Text + "9";
-            }
-            else
-            {
-                number.Text = "9";
-            }
-        }
-
         private void ClearNumber(object sender, EventArgs e)
         {
             number.Text = "0";
         }
 
-        private void AddZeroDigit(object sender, EventArgs e)
+        private void AddDigit(object sender, EventArgs e)
         {
             if (number.Text != "0")
             {
-                number.Text = number.Text + "0";
+                number.Text = number.Text + (sender as Button).Text;
             }
-        }
-
-        private void InvertNumber(object sender, EventArgs e)
-        {
-            if (number.Text[0] == '-')
+            else
             {
-                number.Text = number.Text.Substring(1, number.Text.Length-1);
-            } else
-            {
-                number.Text = number.Text + '-';
-            }
-        }
-
-        private void AddComma(object sender, EventArgs e)
-        {
-            if (!number.Text.Contains(','))
-            {
-                number.Text = number.Text + ',';
+                number.Text = (sender as Button).Text;
             }
         }
 
@@ -163,6 +40,7 @@ namespace UI_Calculator
         {
             numbers.Add(Convert.ToInt32(number.Text));
             operations.Add((sender as Button).Text);
+
             if (expression.Text == "")
             {
                 expression.Text = number.Text + (sender as Button).Text + expression.Text;
@@ -181,52 +59,87 @@ namespace UI_Calculator
             operations = new List<string>();
         }
 
+        private void CalcTopPriorityOperation(ref List<int> newNumbers, int secondOperand, string operation)
+        {
+            var currNumber = newNumbers[newNumbers.Count - 1];
+            newNumbers.RemoveAt(newNumbers.Count - 1);
+            if (operation == "/")
+            {
+                newNumbers.Add(currNumber / secondOperand);
+            }
+            else
+            {
+                newNumbers.Add(currNumber * secondOperand);
+            }
+        }
+
+        private void CalcTopPriorityOperations(ref List<int> oldNumbers, ref List<int> newNumbers, 
+                                               ref List<string> oldOperations, ref List<string> newOperations)
+        {
+            for (int i = 0; i < oldOperations.Count; i++)
+            {
+                if (i > 0)
+                {
+                    if ((oldOperations[i - 1] == "+") || (oldOperations[i - 1] == "-"))
+                    {
+                        newNumbers.Add(oldNumbers[i]);
+                    }
+                }
+                else
+                {
+                    newNumbers.Add(oldNumbers[i]);
+                }
+                if ((oldOperations[i] == "/") || (oldOperations[i] == "x"))
+                {
+                    CalcTopPriorityOperation(ref newNumbers, oldNumbers[i + 1], oldOperations[i]);
+                }
+                else
+                {
+                    newOperations.Add(oldOperations[i]);
+                }
+            }
+            if ((oldOperations[oldOperations.Count - 1] == "+") || (oldOperations[oldOperations.Count - 1] == "-"))
+            {
+                newNumbers.Add(oldNumbers[oldNumbers.Count - 1]);
+            }
+        }
+
+        private void CalcLowPriorityOperations(ref List<int> newNumbers, ref List<string> newOperations, ref int result)
+        {
+            result = newNumbers[0];
+            for (int i = 0; i < newOperations.Count; i++)
+            {
+                if (newOperations[i] == "+")
+                {
+                    result = result + newNumbers[i + 1];
+                }
+                if (newOperations[i] == "-")
+                {
+                    result = result - newNumbers[i + 1];
+                }
+            }
+        }
+
         private void CalcExpression(object sender, EventArgs e)
         {
             List<int> tempNumbers = new List<int>();
             List<string> tempOperations = new List<string>();
             expression.Text = expression.Text + number.Text;
             numbers.Add(Convert.ToInt32(number.Text));
-            
-            for(int i = 0; i < operations.Count; i++)
-            {
-                if ( (operations[i] == "/") || (operations[i] == "*") )
-                {
-                    if (operations[i] == "/")
-                    {
-                        tempNumbers.Add(numbers[i] / numbers[i + 1]);
-                    } else
-                    {
-                        tempNumbers.Add(numbers[i] * numbers[i + 1]);
-                    }
-                } else
-                {
-                    if (i > 0)
-                    {
-                        if (!((operations[i-1] == "/") || (operations[i-1] == "*")))
-                        {
-                            tempNumbers.Add(numbers[i]);
-                        }
-                    }
-                    tempNumbers.Add(numbers[i]);
-                    tempOperations.Add(operations[i]);
-                }
-            }
 
+            CalcTopPriorityOperations(ref numbers, ref tempNumbers, ref operations, ref tempOperations);
             int result = 0;
-            for(int i = 0; i < operations.Count; i++)
-            {
-                if (operations[i] == "+")
-                {
-                    result = result + tempNumbers[i] + tempNumbers[i + 1];
-                }
-                if (operations[i] == "-")
-                {
-                    result = result + tempNumbers[i] - tempNumbers[i + 1];
-                }
-            }
+            CalcLowPriorityOperations(ref tempNumbers, ref tempOperations, ref result);
+
             expression.Text = "";
             number.Text = result.ToString();
+            numbers = new List<int>();
+            operations = new List<string>();
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
     }
