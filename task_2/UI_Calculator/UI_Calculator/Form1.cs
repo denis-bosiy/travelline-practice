@@ -125,14 +125,20 @@ namespace UI_Calculator
             List<int> tempNumbers = new List<int>();
             List<string> tempOperations = new List<string>();
             expression.Text = expression.Text + number.Text;
-            numbers.Add(Convert.ToInt32(number.Text));
-
-            CalcTopPriorityOperations(ref numbers, ref tempNumbers, ref operations, ref tempOperations);
             int result = 0;
-            CalcLowPriorityOperations(ref tempNumbers, ref tempOperations, ref result);
+            try
+            {
+                numbers.Add(Convert.ToInt32(number.Text));
+
+                CalcTopPriorityOperations(ref numbers, ref tempNumbers, ref operations, ref tempOperations);
+                CalcLowPriorityOperations(ref tempNumbers, ref tempOperations, ref result);
+
+                number.Text = result.ToString();
+            } catch {
+                number.Text = "Ошибка ввода";
+            }
 
             expression.Text = "";
-            number.Text = result.ToString();
             numbers = new List<int>();
             operations = new List<string>();
 
