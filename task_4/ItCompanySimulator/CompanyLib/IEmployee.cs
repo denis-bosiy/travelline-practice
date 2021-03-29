@@ -10,6 +10,7 @@ namespace CompanyLib
     {
         string name { get; set; }
         string position { get; set; }
+
         void GetSalary();
         void SetCompany(ICompany company);
     }

@@ -10,8 +10,8 @@ namespace CompanyLib
     {
         int salary { get; set; }
         int budget { get; set; }
-        void Advertise(int advertisementBudget);
 
+        void Advertise(int advertisementBudget);
         void AddParticipant(Employee participant);
         void AddClient(IClient client);
         void SetSalary(int salary);

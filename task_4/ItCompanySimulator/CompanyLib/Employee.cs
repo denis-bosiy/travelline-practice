@@ -8,23 +8,20 @@ namespace CompanyLib
 {
     public class Employee : IEmployee
     {
-        ICompany _company;
-
-        string _name;
-        string _position;
+        private ICompany company;
+        private string _name;
+        private string _position;
 
         public string name
         {
             get { return this._name; }
             set { this._name = value; }
         }
-
         public string position
         {
             get { return this._position; }
             set { this._position = value; }
         }
-
         public Employee(string employeeName, string employeePosition)
         {
             _name = employeeName;
@@ -33,22 +30,21 @@ namespace CompanyLib
 
         public void GetSalary()
         {
-            if (_company.budget <= 0)
+            if (company.budget <= 0)
             {
-                Console.WriteLine("Извини, сегодня без зарплаты! Ахах");
-            } else if (_company.salary > 0)
+                Console.WriteLine("Sorry, today is a not a payday! Ахах");
+            } else if (company.salary > 0)
             {
-                Console.WriteLine("Ура, я получил зп = " + this._company.salary);
-                this._company.budget = this._company.budget - this._company.salary;
+                Console.WriteLine("Hooray, i got salary = " + company.salary);
+                company.budget -= company.salary;
             } else
             {
-                Console.WriteLine("Сотрудник без труда!");
+                Console.WriteLine("Employee without company!");
             }
         }
-
         public void SetCompany(ICompany company)
         {
-            this._company = company;
+            this.company = company;
         }
     }
 }
