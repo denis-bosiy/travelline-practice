@@ -8,7 +8,7 @@ namespace CompanyLib
 {
     public class Employee : IEmployee
     {
-        private ICompany company;
+        private ICompany _company;
         private string _name;
         private string _position;
 
@@ -30,13 +30,13 @@ namespace CompanyLib
 
         public void GetSalary()
         {
-            if (company.budget <= 0)
+            if (_company.budget <= 0)
             {
                 Console.WriteLine("Sorry, today is a not a payday! Ахах");
-            } else if (company.salary > 0)
+            } else if (_company.salary > 0)
             {
-                Console.WriteLine("Hooray, i got salary = " + company.salary);
-                company.budget -= company.salary;
+                Console.WriteLine("Hooray, i got salary = " + _company.salary);
+                _company.budget -= _company.salary;
             } else
             {
                 Console.WriteLine("Employee without company!");
@@ -44,7 +44,7 @@ namespace CompanyLib
         }
         public void SetCompany(ICompany company)
         {
-            this.company = company;
+            this._company = company;
         }
     }
 }

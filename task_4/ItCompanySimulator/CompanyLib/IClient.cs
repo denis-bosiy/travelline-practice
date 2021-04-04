@@ -8,6 +8,8 @@ namespace CompanyLib
 {
     public interface IClient
     {
+        ICompany company { set; }
         void GiveFeedback();
+        void PayMoney(int payment);
     }
 }

@@ -21,13 +21,14 @@ namespace ItCompanySimulator
             ispring.Advertise(100);
             designer.GetSalary();
 
-            GoodClient Honda = new GoodClient();
-            BadClient KupiVIP = new BadClient();
-            ispring.AddClient(Honda);
-            ispring.AddClient(KupiVIP);
+            Client honda = new Client();
+            Client kupivip = new Client();
+            ispring.AddClient(honda);
+            ispring.AddClient(kupivip);
 
-            Honda.GiveFeedback();
-            KupiVIP.GiveFeedback();
+            honda.PayMoney(10);
+            honda.GiveFeedback();
+            kupivip.GiveFeedback();
 
             programmer.GetSalary();
         }

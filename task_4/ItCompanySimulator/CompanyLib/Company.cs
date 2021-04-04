@@ -8,12 +8,12 @@ namespace CompanyLib
 {
     public class Company : ICompany
     {
-        private string idea;
+        private string _idea;
         private int _budget;
         private int _salary;
-        private Employee participantCreator;
-        private List<Employee> team;
-        private List<IClient> clients;
+        private Employee _participantCreator;
+        private List<Employee> _team;
+        private List<IClient> _clients;
         public int budget
         {
             get { return this._budget; }
@@ -27,12 +27,12 @@ namespace CompanyLib
 
         public Company(Employee participantCreator, string idea, int budget, List<Employee> team, int salary)
         {
-            this.participantCreator = participantCreator;
-            this.idea = idea;
+            this._participantCreator = participantCreator;
+            this._idea = idea;
             this.budget = budget;
-            this.team = team;
+            this._team = team;
             this.salary = salary;
-            this.clients = new List<IClient>();
+            this._clients = new List<IClient>();
 
             participantCreator.SetCompany(this);
             foreach(IEmployee participant in team)
@@ -53,7 +53,7 @@ namespace CompanyLib
         }
         public void AddParticipant(Employee participant)
         {
-            this.team.Add(participant);
+            this._team.Add(participant);
             participant.SetCompany(this);
         }
         public void SetSalary(int salary)
@@ -62,7 +62,8 @@ namespace CompanyLib
         }
         public void AddClient(IClient client)
         {
-            this.clients.Add(client);
+            this._clients.Add(client);
+            client.company = this;
         }
 
     }
