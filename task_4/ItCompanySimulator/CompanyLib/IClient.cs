@@ -8,7 +8,7 @@ namespace CompanyLib
 {
     public interface IClient
     {
-        ICompany company { set; }
+        ICompany Company { set; }
         void GiveFeedback();
         void PayMoney(int payment);
     }

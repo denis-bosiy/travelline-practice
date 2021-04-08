@@ -11,18 +11,18 @@ namespace CompanyLib
         private int _budget;
         private ICompany _company;
 
-        public ICompany company
+        public ICompany Company
         {
-            set { this._company = value; }
+            set { _company = value; }
         }
 
         public Client()
         {
-            this._budget = 0;
+            _budget = 0;
         }
         public void GiveFeedback()
         {
-            if (this._budget < 0)
+            if (_budget < 0)
             {
                 Console.WriteLine("Very bad, everything is very bad");
             } else
@@ -33,8 +33,8 @@ namespace CompanyLib
 
         public void PayMoney(int payment)
         {
-            this._budget = this._budget - payment;
-            this._company.budget = this._company.budget + payment;
+            _budget = _budget - payment;
+            _company.Budget = _company.Budget + payment;
         }
     }
 }

@@ -12,15 +12,15 @@ namespace CompanyLib
         private string _name;
         private string _position;
 
-        public string name
+        public string Name
         {
-            get { return this._name; }
-            set { this._name = value; }
+            get { return _name; }
+            set { _name = value; }
         }
-        public string position
+        public string Position
         {
-            get { return this._position; }
-            set { this._position = value; }
+            get { return _position; }
+            set { _position = value; }
         }
         public Employee(string employeeName, string employeePosition)
         {
@@ -30,13 +30,13 @@ namespace CompanyLib
 
         public void GetSalary()
         {
-            if (_company.budget <= 0)
+            if (_company.Budget <= 0)
             {
                 Console.WriteLine("Sorry, today is a not a payday! Ахах");
-            } else if (_company.salary > 0)
+            } else if (_company.Salary > 0)
             {
-                Console.WriteLine("Hooray, i got salary = " + _company.salary);
-                _company.budget -= _company.salary;
+                Console.WriteLine("Hooray, i got salary = " + _company.Salary);
+                _company.Budget -= _company.Salary;
             } else
             {
                 Console.WriteLine("Employee without company!");
@@ -44,7 +44,7 @@ namespace CompanyLib
         }
         public void SetCompany(ICompany company)
         {
-            this._company = company;
+            _company = company;
         }
     }
 }

@@ -8,8 +8,8 @@ namespace CompanyLib
 {
     public interface ICompany
     {
-        int salary { get; set; }
-        int budget { get; set; }
+        int Salary { get; set; }
+        int Budget { get; set; }
 
         void Advertise(int advertisementBudget);
         void AddParticipant(Employee participant);
