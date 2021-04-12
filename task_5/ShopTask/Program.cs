@@ -35,14 +35,14 @@ namespace ShopTask
                 {
                     command.Connection = connection;
                     command.CommandText =
-                        @"SELECT [BlogSystem].[dbo].[Customer].[CustomerId], 
-		                         [BlogSystem].[dbo].[Customer].[Name] as [CustomerName],
-		                         COUNT([BlogSystem].[dbo].[Order].[OrderId]) as [OrdersCount], 
-		                         SUM([BlogSystem].[dbo].[Order].[Price]) as [TotalPrice] 
-		                  FROM [BlogSystem].[dbo].[Customer] 
-                          LEFT JOIN [BlogSystem].[dbo].[Order] 
-		                    ON ([BlogSystem].[dbo].[Customer].[CustomerId] = [BlogSystem].[dbo].[Order].[CustomerId]) 
-                            GROUP BY [BlogSystem].[dbo].[Customer].[CustomerId], [BlogSystem].[dbo].[Customer].[Name]";
+                        @"SELECT [Customer].[CustomerId], 
+		                         [Customer].[Name] as [CustomerName],
+		                         COUNT([Order].[OrderId]) as [OrdersCount], 
+		                         SUM([Order].[Price]) as [TotalPrice] 
+		                  FROM [Customer] 
+                          LEFT JOIN [Order] 
+		                    ON ([Customer].[CustomerId] = [Order].[CustomerId]) 
+                            GROUP BY [Customer].[CustomerId], [Customer].[Name]";
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
