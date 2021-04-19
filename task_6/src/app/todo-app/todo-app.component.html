@@ -1,0 +1,22 @@
+<div class="example-form">
+  <mat-form-field class="text-input">
+    <mat-label>Задача</mat-label>
+    <input
+      matInput
+      placeholder="Напишите задачу"
+      [(ngModel)]="todoText"
+    />
+  </mat-form-field>
+  <button (click)="addTask()" mat-raised-button color="primary">
+    Добавить
+  </button>
+</div>
+
+<section *ngFor="let todo of todos" class="example-section">
+  <mat-checkbox
+    class="todo"
+    [(ngModel)]="todo.done"
+  >
+    <span [class.active]="todo.done">{{ todo.name }}</span></mat-checkbox
+  >
+</section>
