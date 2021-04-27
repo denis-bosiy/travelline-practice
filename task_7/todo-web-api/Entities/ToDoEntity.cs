@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace todo_web_api
+namespace todo_web_api.Entities
 {
-    public class ToDoDto
+    public class ToDoEntity
     {
-        public int Id { get; set; }
+        public int Id { get; }
         public string Name { get; set; }
         public bool Done { get; set; }
         public DateTime CreationDate { get; set; }
-
     }
-
 }

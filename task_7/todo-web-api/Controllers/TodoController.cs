@@ -12,7 +12,12 @@ namespace todo_web_api.Controllers
     [ApiController]
     public class TodoController : ControllerBase
     {
-        private readonly TodoRepository _repository = new TodoRepository();
+        private readonly IToDoRepository _repository;
+
+        public TodoController(IToDoRepository todoRepository)
+        {
+            _repository = todoRepository;
+        }
 
         // GET: api/<TodoController>
         [HttpGet]
@@ -30,9 +35,9 @@ namespace todo_web_api.Controllers
 
         // PUT api/<TodoController>/5
         [HttpPut("{id}")]
-        public void Put([FromBody] ToDoDto toDoDto)
+        public void Put(int id, [FromBody] ToDoDto toDoDto)
         {
-            _repository.Update(toDoDto);
+            _repository.Update(id, toDoDto);
         }
     }
 }

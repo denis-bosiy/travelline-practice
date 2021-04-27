@@ -3,97 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using todo_web_api.Infrastructure;
+using todo_web_api.Entities;
 
 namespace todo_web_api
 {
-    public class TodoRepository
+    public class ToDoRepository: IToDoRepository
     {
-        private static string _connectionString = @"Data Source=DESKTOP-F65ASKG\SQLEXPRESS01;Initial Catalog=ToDoDB;Trusted_Connection=Yes";
+        readonly ToDoDbContext _context;
+        readonly IUnitOfWork _unitOfWork;
 
-        private class ToDo
+        public ToDoRepository( ToDoDbContext context, IUnitOfWork unitOfWork)
         {
-            public int Id { get; set; }
-            public string Name { get; set; }
-
-            public bool Done { get; set; }
-
-            public DateTime CreationDate { get; set; }
+            _context = context;
+            _unitOfWork = unitOfWork;
         }
 
         public List<ToDoDto> GetAll()
         {
-            List<ToDoDto> todos = new List<ToDoDto>();
-
-            using ( SqlConnection connection = new SqlConnection(_connectionString) )
-            {
-                connection.Open();
-                using ( SqlCommand command = new SqlCommand() )
-                {
-                    command.Connection = connection;
-                    command.CommandText =
-                        @"SELECT
-                          [TaskId],
-                          [Name],
-                          [Done],
-                          [CreationDate] 
-                         FROM Tasks";
-                    using ( SqlDataReader reader = command.ExecuteReader() )
-                    {
-                        while ( reader.Read() )
-                        {
-                            var toDo = new ToDoDto
-                            {
-                                Id = Convert.ToInt32(reader["TaskId"]),
-                                Name = Convert.ToString(reader["Name"]),
-                                Done = Convert.ToBoolean(reader["Done"] is DBNull ? false : reader["Done"]),
-                                CreationDate = Convert.ToDateTime(reader["CreationDate"])
-                            };
-                            todos.Add(toDo);
-                        }
-                    }
-                }
-
-            }
-
-            return todos;
+            return _context.Set<ToDoEntity>().ToList().Select(item => new ToDoDto(item)).ToList();
         }
 
         public int Create(ToDoDto toDoDto)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandText =
-                        @"INSERT INTO Tasks ([Name], [CreationDate]) VALUES (@name, @creationDate) SELECT SCOPE_IDENTITY()";
-
-                    command.Parameters.Add("@name", System.Data.SqlDbType.NVarChar).Value = toDoDto.Name;
-                    command.Parameters.Add("@creationDate", System.Data.SqlDbType.DateTime).Value = DateTime.Now;
-
-                    return Convert.ToInt32(command.ExecuteScalar());
-                }
-            }
+            ToDoEntity newEntity = new ToDoEntity();
+            toDoDto.CopyTo(newEntity);
+            _context.Set<ToDoEntity>().Add(newEntity);
+            _unitOfWork.Commit();
+            return newEntity.Id;
         }
 
-        public void Update(ToDoDto toDoDto)
+        public void Update(int id, ToDoDto toDoDto)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand())
-                {
-                    command.Connection = connection;
-                    command.CommandText =
-                        @"UPDATE [Tasks] SET [Done] = @done WHERE TaskId = @taskId";
-
-                    command.Parameters.Add("@done", System.Data.SqlDbType.Bit).Value = Convert.ToInt32(toDoDto.Done);
-                    command.Parameters.Add("@taskId", System.Data.SqlDbType.Int).Value = toDoDto.Id;
-
-                    command.ExecuteNonQuery();
-                }
-            }
+            ToDoEntity foundEntity = _context.Set<ToDoEntity>().SingleOrDefault(item => item.Id == id);
+            toDoDto.CopyTo(foundEntity);
+            _unitOfWork.Commit();
         }
     }
 }
