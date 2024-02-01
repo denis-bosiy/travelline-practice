@@ -7,4 +7,4 @@
 6) Angular todo app
 7) .NET Web Core API и связь с фронтом через Entity Framework
 
-![Travelline](https://upload.wikimedia.org/wikipedia/commons/f/fd/TravelLine_logo.png)
+![Travelline](https://habrastorage.org/getpro/moikrug/uploads/company/100/004/817/2/logo/medium_9175070928c42c44f91dd79dd1aee94c.jpg)
